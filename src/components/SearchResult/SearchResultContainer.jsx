@@ -13,13 +13,13 @@ const useStyles = makeStyles((theme) => ({
       fontWeight: 'bold',
     }
   },
-  resultContainerReplaceQuery: ({ replaceQuery }) => ({
+  resultContainerReplaceQuery: ({ replaceWithValue }) => ({
     '& .searchmatch': {
       textDecoration: 'line-through',
       '&:after': {
         display: 'inline-block',
         textDecoration: 'none',
-        content: `" ${replaceQuery}"`,
+        content: `" ${replaceWithValue}"`,
         paddingLeft: theme.spacing(0.25),
         color: theme.palette.secondary.main
       }
@@ -27,8 +27,14 @@ const useStyles = makeStyles((theme) => ({
   })
 }));
 
-export const SearchResultContainer = ({ children, className, replaceQuery, ...otherProps }) => {
-  const classes = useStyles({ replaceQuery });
+export const SearchResultContainer = ({ 
+  children, 
+  className, 
+  replaceWithValue,
+  showReplaceWithValueHighlight,
+  ...otherProps 
+}) => {
+  const classes = useStyles({ replaceWithValue });
 
   return (
     <ListItem
@@ -36,7 +42,7 @@ export const SearchResultContainer = ({ children, className, replaceQuery, ...ot
         clsx(
           className,
           classes.resultContainer,
-          replaceQuery && classes.resultContainerReplaceQuery
+          replaceWithValue && showReplaceWithValueHighlight && classes.resultContainerReplaceQuery
         )
       }
       {...otherProps}
