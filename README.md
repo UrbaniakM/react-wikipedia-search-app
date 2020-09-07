@@ -2,6 +2,8 @@
 
 Wikipedia search SPA created as recrutation task for XTM.
 
+Preview the app at https://UrbaniakM.github.io/react-wikipedia-search-app
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Running the app (for development)
@@ -31,4 +33,4 @@ Builds the app for deployment to production to the `build` folder.<br />
 
 Run `yarn deploy` in the project directory.
 
-Project will be deployed to http://UrbaniakM.github.io/react-wikipedia-search-app
+Project will be deployed to https://UrbaniakM.github.io/react-wikipedia-search-app
