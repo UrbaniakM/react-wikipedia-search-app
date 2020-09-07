@@ -56,6 +56,9 @@ export const Main = () => {
     setSearchResults(searchResults.query.search);
   }, [getSearchWikiPhrase, setSearchResults])
 
+  const disableReplaceField = !searchQuery || !searchResults || !searchResults.length === 0;
+  const disableReplaceButtons = disableReplaceField || !replaceQuery;
+
   return (
     <main className={classes.main}>
       <Column>
@@ -74,13 +77,13 @@ export const Main = () => {
         </Row>
         <Row className={classes.row}>
           <ReplacePhraseField
-            disabled={!searchQuery}
+            disabled={disableReplaceField}
             value={replaceQuery}
             onChange={setReplaceQuery}
           />
           <Row className={classes.buttonsContainer}>
             <Button
-              disabled={!replaceQuery || !searchQuery}
+              disabled={disableReplaceButtons}
               onMouseOver={onMouseOverReplace}
               onMouseLeave={onMouseLeaveReplace}
               variant="outlined"
@@ -89,7 +92,7 @@ export const Main = () => {
             </Button>
             <Button
               variant="outlined"
-              disabled={!replaceQuery || !searchQuery}
+              disabled={disableReplaceButtons}
               onMouseOver={onMouseOverReplaceAll}
               onMouseLeave={onMouseLeaveReplaceAll}
             >
