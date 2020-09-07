@@ -2,8 +2,10 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders search, replace and replace all buttons', () => {
   const { getByText } = render(<App />);
-  const linkElement = getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+
+  expect(getByText('Search')).toBeInTheDocument();
+  expect(getByText('Replace')).toBeInTheDocument();
+  expect(getByText('Replace all')).toBeInTheDocument();
 });
