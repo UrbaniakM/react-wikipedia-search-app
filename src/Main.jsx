@@ -9,7 +9,7 @@ import {
   SearchResultTitle,
   SearchResultSnippet
 } from './components';
-import { useGetSearchWikiPhrase } from './hooks';
+import { useGetSearchWikiPhrase, useIsElementHovered } from './hooks';
 import { makeStyles, Typography, List } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -38,6 +38,18 @@ export const Main = () => {
 
   const [searchQuery, setSearchQuery] = React.useState();
   const [replaceQuery, setReplaceQuery] = React.useState();
+
+  const {
+    hovered: hoveredReplace,
+    onMouseOver: onMouseOverReplace,
+    onMouseLeave: onMouseLeaveReplace
+  } = useIsElementHovered();
+
+  const {
+    hovered: hoveredReplaceAll,
+    onMouseOver: onMouseOverReplaceAll,
+    onMouseLeave: onMouseLeaveReplaceAll
+  } = useIsElementHovered();
 
   const handleWikiPhraseSearch = React.useCallback((phrase) => async () => {
     const searchResults = await getSearchWikiPhrase(phrase);
@@ -69,6 +81,8 @@ export const Main = () => {
           <Row className={classes.buttonsContainer}>
             <Button
               disabled={!replaceQuery || !searchQuery}
+              onMouseOver={onMouseOverReplace}
+              onMouseLeave={onMouseLeaveReplace}
               variant="outlined"
             >
               Replace
@@ -76,6 +90,8 @@ export const Main = () => {
             <Button
               variant="outlined"
               disabled={!replaceQuery || !searchQuery}
+              onMouseOver={onMouseOverReplaceAll}
+              onMouseLeave={onMouseLeaveReplaceAll}
             >
               Replace all
             </Button>
@@ -88,6 +104,7 @@ export const Main = () => {
             <SearchResultContainer
               key={result.title}
               replaceWithValue={replaceQuery}
+              showReplaceWithValueHighlight={(index === 0 && hoveredReplace) || hoveredReplaceAll}
             >
               <SearchResultTitle>
                 {result.title}
