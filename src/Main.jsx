@@ -9,10 +9,9 @@ import {
   SearchResultTitle,
   SearchResultSnippet
 } from './components';
-import { useGetSearchWikiPhrase, useIsElementHovered } from './hooks';
+import { useIsElementHovered, useDebouncedSearch } from './hooks';
 import { makeStyles, Typography, List } from '@material-ui/core';
 import { replaceSearchResultSnippetMatch, replace } from './utils';
-import debounce from 'lodash.debounce';
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -60,11 +59,15 @@ const replaceAllMatches = (searchResults, newMatch) => searchResults.map((result
 export const Main = () => {
   const classes = useStyles();
 
-  const { getSearchWikiPhrase, isFetching } = useGetSearchWikiPhrase();
+  const {
+    isFetching,
+    searchQuery,
+    searchResults,
+    setSearchQuery,
+    setSearchResults,
+    runSearchFlush
+  } = useDebouncedSearch();
 
-  const [searchResults, setSearchResults] = React.useState();
-
-  const [searchQuery, setSearchQuery] = React.useState('');
   const [replaceQuery, setReplaceQuery] = React.useState('');
 
   const {
@@ -78,27 +81,6 @@ export const Main = () => {
     onMouseOver: onMouseOverReplaceAll,
     onMouseLeave: onMouseLeaveReplaceAll
   } = useIsElementHovered();
-
-  const handleWikiPhraseSearch = React.useCallback((phrase) => async () => {
-    const searchResults = await getSearchWikiPhrase(phrase);
-    setSearchResults(searchResults.query.search);
-  }, [getSearchWikiPhrase, setSearchResults])
-
-  const debouncedHandleWikiPhraseSearch = React.useCallback(
-    debounce(handleWikiPhraseSearch(searchQuery), 1000),
-    [searchQuery, handleWikiPhraseSearch]
-  );
-
-  const flushDebouncedHandleWikiPhraseSearch = React.useCallback(() => {
-    debouncedHandleWikiPhraseSearch.flush();
-  }, [debouncedHandleWikiPhraseSearch])
-
-  React.useEffect(() => {
-    searchQuery.length > 0 && debouncedHandleWikiPhraseSearch();
-
-    // cleanup
-    return () => debouncedHandleWikiPhraseSearch.cancel();
-  }, [searchQuery, debouncedHandleWikiPhraseSearch]);
 
   const handleReplaceHighlightPhrase = React.useCallback((replacePhrase, replaceAll) => () => {
     const updateSearchResultsFunc = replaceAll ? replaceAllMatches : replaceFirstHighlightedMatch;
@@ -119,7 +101,7 @@ export const Main = () => {
           />
           <Button
             disabled={isFetching || !searchQuery}
-            onClick={flushDebouncedHandleWikiPhraseSearch}
+            onClick={runSearchFlush}
             className={classes.searchButton}
           >
             Search
