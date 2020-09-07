@@ -56,7 +56,7 @@ export const Main = () => {
     setSearchResults(searchResults.query.search);
   }, [getSearchWikiPhrase, setSearchResults])
 
-  const disableReplaceField = !searchQuery || !searchResults || !searchResults.length === 0;
+  const disableReplaceField = isFetching || !searchQuery || !searchResults || !searchResults.length === 0;
   const disableReplaceButtons = disableReplaceField || !replaceQuery;
 
   return (
