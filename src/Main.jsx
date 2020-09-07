@@ -7,7 +7,8 @@ import {
   Button,
   SearchResultContainer,
   SearchResultTitle,
-  SearchResultSnippet
+  SearchResultSnippet,
+  LoadingNote
 } from './components';
 import { useIsElementHovered, useDebouncedSearch } from './hooks';
 import { makeStyles, Typography, List } from '@material-ui/core';
@@ -55,7 +56,6 @@ const replaceAllMatches = (searchResults, newMatch) => searchResults.map((result
   snippet: replaceSearchResultSnippetMatch(result.snippet, newMatch)
 }));
 
-// TODO: add circular loading indicator
 export const Main = () => {
   const classes = useStyles();
 
@@ -135,6 +135,9 @@ export const Main = () => {
           </Row>
         </Row>
       </Column>
+      {isFetching && (
+        <LoadingNote />
+      )}
       {searchResults && searchResults.length > 0 && (
         <List>
           {searchResults.map((result, index) => (
