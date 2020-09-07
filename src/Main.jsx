@@ -16,7 +16,8 @@ import { replaceSearchResultSnippetMatch, replace } from './utils';
 
 const useStyles = makeStyles((theme) => ({
   main: {
-    margin: theme.spacing(2)
+    margin: theme.spacing(2),
+    maxWidth: 750
   },
   searchButton: {
     margin: theme.spacing(0, 1)
