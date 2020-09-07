@@ -25,3 +25,10 @@ Launches the test runner in the interactive watch mode.<br />
 Run `yarn build` in the project directory.
 
 Builds the app for deployment to production to the `build` folder.<br />
+
+
+## Deployment
+
+Run `yarn deploy` in the project directory.
+
+Project will be deployed to http://UrbaniakM.github.io/react-wikipedia-search-app
