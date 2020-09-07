@@ -11,6 +11,7 @@ import {
 } from './components';
 import { useGetSearchWikiPhrase, useIsElementHovered } from './hooks';
 import { makeStyles, Typography, List } from '@material-ui/core';
+import { replaceSearchResultSnippetMatch, replace } from './utils';
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -28,6 +29,30 @@ const useStyles = makeStyles((theme) => ({
   row: {
     margin: theme.spacing(1.5, 0)
   }
+}));
+
+const replaceFirstHighlightedMatch = (searchResults, newMatch) => {
+  const replaceResultIndex = searchResults.findIndex((result) => 
+    result.snippet.includes('<span class="searchmatch">')
+  );
+
+  if (replaceResultIndex < 0) {
+    return searchResults;
+  }
+
+  const currentResult = searchResults[replaceResultIndex];
+
+  const updatedResult = {
+    ...currentResult,
+    snippet: replaceSearchResultSnippetMatch(currentResult.snippet, newMatch)
+  }
+
+  return replace(searchResults, updatedResult, replaceResultIndex);
+};
+
+const replaceAllMatches = (searchResults, newMatch) => searchResults.map((result) => ({
+  ...result,
+  snippet: replaceSearchResultSnippetMatch(result.snippet, newMatch)
 }));
 
 export const Main = () => {
@@ -55,6 +80,12 @@ export const Main = () => {
     const searchResults = await getSearchWikiPhrase(phrase);
     setSearchResults(searchResults.query.search);
   }, [getSearchWikiPhrase, setSearchResults])
+
+  const handleReplaceHighlightPhrase = React.useCallback((replacePhrase, replaceAll) => () => {
+    const updateSearchResultsFunc = replaceAll ? replaceAllMatches : replaceFirstHighlightedMatch;
+    setSearchResults((searchResults) => updateSearchResultsFunc(searchResults, replacePhrase));
+    replaceAll && setReplaceQuery('');
+  }, [setSearchResults, setReplaceQuery]);
 
   const disableReplaceField = isFetching || !searchQuery || !searchResults || !searchResults.length === 0;
   const disableReplaceButtons = disableReplaceField || !replaceQuery;
@@ -84,6 +115,7 @@ export const Main = () => {
           <Row className={classes.buttonsContainer}>
             <Button
               disabled={disableReplaceButtons}
+              onClick={handleReplaceHighlightPhrase(replaceQuery, false)}
               onMouseOver={onMouseOverReplace}
               onMouseLeave={onMouseLeaveReplace}
               variant="outlined"
@@ -93,6 +125,7 @@ export const Main = () => {
             <Button
               variant="outlined"
               disabled={disableReplaceButtons}
+              onClick={handleReplaceHighlightPhrase(replaceQuery, true)}
               onMouseOver={onMouseOverReplaceAll}
               onMouseLeave={onMouseLeaveReplaceAll}
             >
