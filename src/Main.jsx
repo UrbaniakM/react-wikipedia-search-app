@@ -36,8 +36,8 @@ export const Main = () => {
   const { getSearchWikiPhrase, isFetching } = useGetSearchWikiPhrase();
   const [searchResults, setSearchResults] = React.useState();
 
-  const [searchQuery, setSearchQuery] = React.useState();
-  const [replaceQuery, setReplaceQuery] = React.useState();
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [replaceQuery, setReplaceQuery] = React.useState('');
 
   const {
     hovered: hoveredReplace,
