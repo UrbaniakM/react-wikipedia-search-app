@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/react-wikipedia-search-app/static/css/main.5ecd60fb.chunk.css",
+    "main.js": "/react-wikipedia-search-app/static/js/main.ea533b10.chunk.js",
+    "main.js.map": "/react-wikipedia-search-app/static/js/main.ea533b10.chunk.js.map",
+    "runtime-main.js": "/react-wikipedia-search-app/static/js/runtime-main.749bae93.js",
+    "runtime-main.js.map": "/react-wikipedia-search-app/static/js/runtime-main.749bae93.js.map",
+    "static/js/2.0de7f194.chunk.js": "/react-wikipedia-search-app/static/js/2.0de7f194.chunk.js",
+    "static/js/2.0de7f194.chunk.js.map": "/react-wikipedia-search-app/static/js/2.0de7f194.chunk.js.map",
+    "index.html": "/react-wikipedia-search-app/index.html",
+    "precache-manifest.357724910a068024c37305c5e875f4f7.js": "/react-wikipedia-search-app/precache-manifest.357724910a068024c37305c5e875f4f7.js",
+    "service-worker.js": "/react-wikipedia-search-app/service-worker.js",
+    "static/css/main.5ecd60fb.chunk.css.map": "/react-wikipedia-search-app/static/css/main.5ecd60fb.chunk.css.map",
+    "static/js/2.0de7f194.chunk.js.LICENSE.txt": "/react-wikipedia-search-app/static/js/2.0de7f194.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.749bae93.js",
+    "static/js/2.0de7f194.chunk.js",
+    "static/css/main.5ecd60fb.chunk.css",
+    "static/js/main.ea533b10.chunk.js"
+  ]
+}
