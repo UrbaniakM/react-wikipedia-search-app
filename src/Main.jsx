@@ -12,6 +12,7 @@ import {
 import { useGetSearchWikiPhrase, useIsElementHovered } from './hooks';
 import { makeStyles, Typography, List } from '@material-ui/core';
 import { replaceSearchResultSnippetMatch, replace } from './utils';
+import debounce from 'lodash.debounce';
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const replaceFirstHighlightedMatch = (searchResults, newMatch) => {
-  const replaceResultIndex = searchResults.findIndex((result) => 
+  const replaceResultIndex = searchResults.findIndex((result) =>
     result.snippet.includes('<span class="searchmatch">')
   );
 
@@ -55,10 +56,12 @@ const replaceAllMatches = (searchResults, newMatch) => searchResults.map((result
   snippet: replaceSearchResultSnippetMatch(result.snippet, newMatch)
 }));
 
+// TODO: add circular loading indicator
 export const Main = () => {
   const classes = useStyles();
 
   const { getSearchWikiPhrase, isFetching } = useGetSearchWikiPhrase();
+
   const [searchResults, setSearchResults] = React.useState();
 
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -81,6 +84,22 @@ export const Main = () => {
     setSearchResults(searchResults.query.search);
   }, [getSearchWikiPhrase, setSearchResults])
 
+  const debouncedHandleWikiPhraseSearch = React.useCallback(
+    debounce(handleWikiPhraseSearch(searchQuery), 1000),
+    [searchQuery, handleWikiPhraseSearch]
+  );
+
+  const flushDebouncedHandleWikiPhraseSearch = React.useCallback(() => {
+    debouncedHandleWikiPhraseSearch.flush();
+  }, [debouncedHandleWikiPhraseSearch])
+
+  React.useEffect(() => {
+    searchQuery.length > 0 && debouncedHandleWikiPhraseSearch();
+
+    // cleanup
+    return () => debouncedHandleWikiPhraseSearch.cancel();
+  }, [searchQuery, debouncedHandleWikiPhraseSearch]);
+
   const handleReplaceHighlightPhrase = React.useCallback((replacePhrase, replaceAll) => () => {
     const updateSearchResultsFunc = replaceAll ? replaceAllMatches : replaceFirstHighlightedMatch;
     setSearchResults((searchResults) => updateSearchResultsFunc(searchResults, replacePhrase));
@@ -100,7 +119,7 @@ export const Main = () => {
           />
           <Button
             disabled={isFetching || !searchQuery}
-            onClick={handleWikiPhraseSearch(searchQuery)}
+            onClick={flushDebouncedHandleWikiPhraseSearch}
             className={classes.searchButton}
           >
             Search
